@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr
 from typing import List, Optional
 import asyncio
 
-app = FastAPI(title="Semana 2 - Sistema de Gestión de Proyectos")
+app = FastAPI(title="Semana 2 - Gestión de Proyectos")
 
 # ===========================
 # MODELOS Pydantic
@@ -11,7 +11,7 @@ app = FastAPI(title="Semana 2 - Sistema de Gestión de Proyectos")
 class Usuario(BaseModel):
     id: int
     nombre: str
-    correo: EmailStr
+    email: EmailStr
     activo: bool = True
 
 class Proyecto(BaseModel):
@@ -37,76 +37,78 @@ class Comentario(BaseModel):
 # ===========================
 # DATOS EN MEMORIA
 # ===========================
-usuarios: List[Usuario] = []
-proyectos: List[Proyecto] = []
-tareas: List[Tarea] = []
-comentarios: List[Comentario] = []
+usuarios_db: List[Usuario] = []
+proyectos_db: List[Proyecto] = []
+tareas_db: List[Tarea] = []
+comentarios_db: List[Comentario] = []
 
 # ===========================
 # CRUD USUARIOS
 # ===========================
 @app.post("/usuarios", response_model=Usuario)
-def crear_usuario(usuario: Usuario):
-    usuarios.append(usuario)
+def crear_usuario(usuario: Usuario) -> Usuario:
+    usuarios_db.append(usuario)
     return usuario
 
 @app.get("/usuarios", response_model=List[Usuario])
-def listar_usuarios():
-    return usuarios
+def listar_usuarios() -> List[Usuario]:
+    return usuarios_db
 
 @app.get("/usuarios/{usuario_id}", response_model=Usuario)
-def obtener_usuario(usuario_id: int):
-    for u in usuarios:
-        if u.id == usuario_id:
-            return u
+def obtener_usuario(usuario_id: int) -> Usuario:
+    for usuario in usuarios_db:
+        if usuario.id == usuario_id:
+            return usuario
     raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
 @app.delete("/usuarios/{usuario_id}")
-def eliminar_usuario(usuario_id: int):
-    global usuarios
-    usuarios = [u for u in usuarios if u.id != usuario_id]
-    return {"mensaje": "Usuario eliminado"}
+def desactivar_usuario(usuario_id: int) -> dict:
+    for usuario in usuarios_db:
+        if usuario.id == usuario_id:
+            usuario.activo = False
+            return {"mensaje": "Usuario desactivado"}
+    raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
 # ===========================
 # CRUD PROYECTOS
 # ===========================
 @app.post("/proyectos", response_model=Proyecto)
-def crear_proyecto(proyecto: Proyecto):
-    proyectos.append(proyecto)
+def crear_proyecto(proyecto: Proyecto) -> Proyecto:
+    proyectos_db.append(proyecto)
     return proyecto
 
 @app.get("/proyectos", response_model=List[Proyecto])
-def listar_proyectos():
-    return proyectos
+def listar_proyectos() -> List[Proyecto]:
+    return proyectos_db
 
 # ===========================
 # CRUD TAREAS
 # ===========================
 @app.post("/tareas", response_model=Tarea)
-def crear_tarea(tarea: Tarea):
-    tareas.append(tarea)
+def crear_tarea(tarea: Tarea) -> Tarea:
+    tareas_db.append(tarea)
     return tarea
 
 @app.get("/tareas", response_model=List[Tarea])
-def listar_tareas():
-    return tareas
+def listar_tareas() -> List[Tarea]:
+    return tareas_db
 
 # ===========================
 # CRUD COMENTARIOS
 # ===========================
 @app.post("/comentarios", response_model=Comentario)
-def crear_comentario(comentario: Comentario):
-    comentarios.append(comentario)
+def crear_comentario(comentario: Comentario) -> Comentario:
+    comentarios_db.append(comentario)
     return comentario
 
 @app.get("/comentarios", response_model=List[Comentario])
-def listar_comentarios():
-    return comentarios
+def listar_comentarios() -> List[Comentario]:
+    return comentarios_db
 
 # ===========================
 # ENDPOINT ASYNC EJEMPLO
 # ===========================
-@app.get("/backup")
-async def hacer_backup():
-    await asyncio.sleep(2)  # Simula proceso largo
-    return {"mensaje": "Backup completado"}
+@app.get("/simular-proceso")
+async def simular_proceso() -> dict:
+    await asyncio.sleep(3)  # Simula proceso largo
+    return {"mensaje": "Proceso completado"}
