@@ -5,9 +5,8 @@ import asyncio
 
 app = FastAPI(title="Semana 2 - Gestión de Proyectos")
 
-# ===========================
 # MODELOS Pydantic
-# ===========================
+
 class Usuario(BaseModel):
     id: int
     nombre: str
@@ -34,17 +33,15 @@ class Comentario(BaseModel):
     autor_id: int
     tarea_id: int
 
-# ===========================
 # DATOS EN MEMORIA
-# ===========================
+
 usuarios_db: List[Usuario] = []
 proyectos_db: List[Proyecto] = []
 tareas_db: List[Tarea] = []
 comentarios_db: List[Comentario] = []
 
-# ===========================
 # CRUD USUARIOS
-# ===========================
+
 @app.post("/usuarios", response_model=Usuario)
 def crear_usuario(usuario: Usuario) -> Usuario:
     usuarios_db.append(usuario)
@@ -69,9 +66,9 @@ def desactivar_usuario(usuario_id: int) -> dict:
             return {"mensaje": "Usuario desactivado"}
     raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
-# ===========================
+
 # CRUD PROYECTOS
-# ===========================
+
 @app.post("/proyectos", response_model=Proyecto)
 def crear_proyecto(proyecto: Proyecto) -> Proyecto:
     proyectos_db.append(proyecto)
@@ -81,9 +78,8 @@ def crear_proyecto(proyecto: Proyecto) -> Proyecto:
 def listar_proyectos() -> List[Proyecto]:
     return proyectos_db
 
-# ===========================
 # CRUD TAREAS
-# ===========================
+
 @app.post("/tareas", response_model=Tarea)
 def crear_tarea(tarea: Tarea) -> Tarea:
     tareas_db.append(tarea)
@@ -93,9 +89,9 @@ def crear_tarea(tarea: Tarea) -> Tarea:
 def listar_tareas() -> List[Tarea]:
     return tareas_db
 
-# ===========================
+
 # CRUD COMENTARIOS
-# ===========================
+
 @app.post("/comentarios", response_model=Comentario)
 def crear_comentario(comentario: Comentario) -> Comentario:
     comentarios_db.append(comentario)
@@ -105,9 +101,8 @@ def crear_comentario(comentario: Comentario) -> Comentario:
 def listar_comentarios() -> List[Comentario]:
     return comentarios_db
 
-# ===========================
 # ENDPOINT ASYNC EJEMPLO
-# ===========================
+
 @app.get("/simular-proceso")
 async def simular_proceso() -> dict:
     await asyncio.sleep(3)  # Simula proceso largo

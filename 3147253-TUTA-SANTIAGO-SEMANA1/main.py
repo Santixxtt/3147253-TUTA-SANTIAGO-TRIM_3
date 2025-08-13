@@ -5,9 +5,8 @@ from datetime import date, datetime
 
 app = FastAPI(title="Semana 1 - Gestión de Tareas")
 
-# ===========================
 # MODELOS
-# ===========================
+
 class Preferencias(BaseModel):
     tema: str
     idioma: str
@@ -41,16 +40,14 @@ class Tarea(BaseModel):
     actualizado_en: datetime
     etiquetas: List[str]
 
-# ===========================
 # BASE DE DATOS EN MEMORIA
-# ===========================
+
 usuarios_db: List[Usuario] = []
 categorias_db: List[Categoria] = []
 tareas_db: List[Tarea] = []
 
-# ===========================
 # CRUD USUARIOS
-# ===========================
+
 @app.post("/usuarios", response_model=Usuario)
 def crear_usuario(usuario: Usuario):
     usuarios_db.append(usuario)
@@ -76,9 +73,8 @@ def eliminar_usuario():
         return {"mensaje": "Usuario eliminado"}
     raise HTTPException(status_code=404, detail="No hay usuario para eliminar")
 
-# ===========================
 # CRUD CATEGORÍAS
-# ===========================
+
 @app.post("/categorias", response_model=Categoria)
 def crear_categoria(categoria: Categoria):
     categorias_db.append(categoria)
@@ -104,9 +100,8 @@ def eliminar_categoria(categoria_id: int):
             return {"mensaje": "Categoría eliminada"}
     raise HTTPException(status_code=404, detail="Categoría no encontrada")
 
-# ===========================
 # CRUD TAREAS
-# ===========================
+
 @app.post("/tareas", response_model=Tarea)
 def crear_tarea(tarea: Tarea):
     tareas_db.append(tarea)
@@ -152,9 +147,8 @@ def cambiar_estado(tarea_id: int, estado: str):
             return {"mensaje": f"Estado cambiado a {estado}"}
     raise HTTPException(status_code=404, detail="Tarea no encontrada")
 
-# ===========================
 # ESTADÍSTICAS
-# ===========================
+
 @app.get("/stats/summary")
 def resumen():
     return {

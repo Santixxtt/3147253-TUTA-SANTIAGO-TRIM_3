@@ -1,12 +1,19 @@
-# Semana 2 - API con Pydantic y Type Hints
+# 📅 Semana 2 - Gestión de Proyectos con FastAPI
 
-Este proyecto corresponde a la entrega de la semana 2, donde se desarrse desarolla y se hace uso de la API más completa utilizando pydantic para la validación de datos y type hints en todos los endpoints.
+##  ¿Qué hace?
 
-## 📌 Funcionalidades
-- CRUD de Usuarios, Proyectos, Tareas y Comentarios.
-- Validación de datos con modelos Pydantic.
-- Endpoints asíncronos (`async/await`) para simular tareas largas.
-- Documentación automática en `/docs`.
+Después de revisar los documentos de la semana 2, desarrollé el proyecto con de Pydantic, type hints y un CRUD básico para usuarios, proyectos, tareas y comentarios.  
+Incluyendo un soft delete para usuarios y un endpoint asíncrono que simula un proceso.
 
+## ¿Cómo ejecutar?
+
+uvicorn main:app --reload
+
+1. **Instalar dependencias**  
    ```bash
-   pip install -r requirements.txt
+   pip install fastapi uvicorn pydantic
+
+## Reflexión
+
+En esta semana aprendí a implementar Pydantic y type hints para hacer validaciones automáticas.
+Se implemento un CRUD completo para varias entidades, incluyendo un soft delete para usuarios y un endpoint asíncrono.
